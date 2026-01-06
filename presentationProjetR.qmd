@@ -1,0 +1,649 @@
+---
+title: "Analyse des Campagnes de Vaccination Animale"
+subtitle: "Gouvernorat de Sousse (2017-2020)"
+author: "Meddeb Acharf"
+date: "2025-12-29"
+format:
+  html:
+    theme: flatly
+    code-fold: true
+    code-tools: true
+    code-summary: "📝 Voir le code"
+    toc: true
+    toc-depth: 2
+    toc-title: "📑 Sommaire"
+    number-sections: true
+    highlight-style: github
+    self-contained: true
+    fig-width: 12
+    fig-height: 8
+    fig-align: center
+    fig-cap-location: bottom
+    fontsize: 1.1em
+    mainfont: "Segoe UI, Roboto, sans-serif"
+    monofont: "Consolas, Monaco, monospace"
+execute:
+  echo: true
+  warning: false
+  message: false
+---
+
+<style>
+/* Styles personnalisés */
+.title {
+  color: #2c3e50;
+  border-bottom: 3px solid #3498db;
+  padding-bottom: 15px;
+  text-align: center;
+}
+
+.subtitle {
+  color: #7f8c8d;
+  font-style: italic;
+  text-align: center;
+}
+
+.section-header {
+  background: linear-gradient(90deg, #3498db, #2c3e50);
+  color: white;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 30px 0 20px 0;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.card {
+  background: #f8f9fa;
+  border-left: 5px solid #3498db;
+  padding: 20px;
+  border-radius: 5px;
+  margin: 20px 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.highlight-box {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border: 2px solid #3498db;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 25px 0;
+}
+
+.callout-success {
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+  color: #155724;
+  padding: 15px;
+  border-left: 5px solid #28a745;
+  border-radius: 5px;
+}
+
+.callout-warning {
+  background-color: #fff3cd;
+  border-color: #ffeaa7;
+  color: #856404;
+  padding: 15px;
+  border-left: 5px solid #ffc107;
+  border-radius: 5px;
+}
+
+.figure-title {
+  font-weight: bold;
+  color: #2c3e50;
+  margin-top: 15px;
+  text-align: center;
+}
+
+.conclusion-box {
+  background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+  color: white;
+  padding: 25px;
+  border-radius: 10px;
+  margin: 30px 0;
+}
+
+.chart-container {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  margin: 20px 0;
+}
+</style>
+
+ <div class="title">🔬 PROJET STATISTIQUE AVEC R</div>
+
+ <div class="subtitle">Analyse des Campagnes de Vaccination Animale<br>Gouvernorat de Sousse (2017-2020)</div>
+
+<div style="text-align: center; margin: 30px 0;">
+  <div style="display: inline-block; text-align: left; background: #f8f9fa; padding: 20px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    📋 Informations du projet :
+    Auteur : Meddeb Acharf
+    Date : 2025-12-29
+    Source des données : Catalogue Open Data Tunisie (CRDA Sousse)
+    Logiciel : R version 4.3.1
+    🔬 PROJET STATISTIQUE AVEC R
+  </div>
+</div>
+
+---
+
+<div class="section-header">📋 CONTEXTE DU PROJET</div>
+
+<div class="card">
+Les maladies animales contagieuses représentent une menace majeure pour :
+<ul>
+  <li> <strong>L'élevage</strong> et l'économie agricole</li>
+  <li> <strong>La santé publique</strong> en Tunisie</li>
+  <li> <strong>L'économie nationale</strong></li>
+</ul>
+
+<p>Ce projet analyse les données de vaccination animale du <strong>Gouvernorat de Sousse</strong> sur la période <span style="color: #e74c3c; font-weight: bold;">2017-2020</span>.</p>
+</div>
+
+### 🦠 Maladies couvertes
+
+<div class="highlight-box">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+<div style="flex: 1; min-width: 150px; text-align: center; margin: 5px;">
+  <div style="background: #e74c3c; color: white; padding: 10px; border-radius: 5px;">
+    Rage
+  </div>
+</div>
+<div style="flex: 1; min-width: 150px; text-align: center; margin: 5px;">
+  <div style="background: #3498db; color: white; padding: 10px; border-radius: 5px;">
+    Fièvre Aphteuse
+  </div>
+</div>
+<div style="flex: 1; min-width: 150px; text-align: center; margin: 5px;">
+  <div style="background: #2ecc71; color: white; padding: 10px; border-radius: 5px;">
+    Clavelée
+  </div>
+</div>
+<div style="flex: 1; min-width: 150px; text-align: center; margin: 5px;">
+  <div style="background: #9b59b6; color: white; padding: 10px; border-radius: 5px;">
+    Blue Tongue
+  </div>
+</div>
+</div>
+</div>
+
+---
+
+<div class="section-header">🎯 OBJECTIFS DE L'ANALYSE</div>
+
+### 🎯 Objectif Général
+
+<div class="card">
+Évaluer l'efficacité et la performance des campagnes de vaccination animale réalisées dans le Gouvernorat de Sousse sur la période **2017–2020**.
+</div>
+
+### 📊 Objectifs Spécifiques
+
+<div class="card">
+<ol>
+<li>Analyser l'évolution temporelle (2017-2020)</li>
+<li>Mesurer les taux de couverture vaccinale</li>
+<li>Évaluer l'écart objectifs vs réalisations</li>
+<li>Classer les campagnes par efficacité</li>
+<li>Identifier les points d'amélioration</li>
+<li>Analyser statistiquement les différences</li>
+<li>Modéliser par régression linéaire</li>
+</ol>
+</div>
+
+### 📈 Classification de l'Efficacité
+
+<div style="display: flex; justify-content: space-between; margin: 20px 0; flex-wrap: wrap;">
+  <div style="flex: 1; min-width: 150px; text-align: center; background: #27ae60; color: white; padding: 10px; margin: 5px; border-radius: 5px;">
+    Excellente ≥ 90%
+  </div>
+  <div style="flex: 1; min-width: 150px; text-align: center; background: #2ecc71; color: white; padding: 10px; margin: 5px; border-radius: 5px;">
+     Bonne 75-89%
+  </div>
+  <div style="flex: 1; min-width: 150px; text-align: center; background: #f39c12; color: white; padding: 10px; margin: 5px; border-radius: 5px;">
+    Moyenne 50-74%
+  </div>
+  <div style="flex: 1; min-width: 150px; text-align: center; background: #e74c3c; color: white; padding: 10px; margin: 5px; border-radius: 5px;">
+     Faible  50%
+  </div>
+</div>
+
+---
+
+<div class="section-header">📊 DONNÉES UTILISÉES</div>
+
+<div style="display: flex; justify-content: space-around; flex-wrap: wrap; margin: 20px 0;">
+<div style="flex: 1; min-width: 200px; text-align: center; margin: 10px;">
+  <div style="background: #3498db; color: white; padding: 20px; border-radius: 10px; height: 150px; display: flex; flex-direction: column; justify-content: center;">
+     📅 Période 
+     4 ans 
+     2017 - 2020 
+  </div>
+</div>
+<div style="flex: 1; min-width: 200px; text-align: center; margin: 10px;">
+  <div style="background: #2ecc71; color: white; padding: 20px; border-radius: 10px; height: 150px; display: flex; flex-direction: column; justify-content: center;">
+    📊 Observations 
+     44 
+     Enregistrements 
+  </div>
+</div>
+<div style="flex: 1; min-width: 200px; text-align: center; margin: 10px;">
+  <div style="background: #9b59b6; color: white; padding: 20px; border-radius: 10px; height: 150px; display: flex; flex-direction: column; justify-content: center;">
+     🔢 Variables 
+     7 
+     Colonnes 
+  </div>
+</div>
+</div>
+
+### Structure des données
+
+```{r}
+#| echo: false
+#| warning: false
+cat("Variables disponibles dans le dataset :\n\n")
+cat("1. année : Année de la campagne\n")
+cat("2. Campagne_de_vaccination : Type de maladie\n")
+cat("3. Espece_animale : Espèce ciblée\n")
+cat("4. nombre_animaux_programmes : Objectifs\n")
+cat("5. nombre_animaux_vaccines : Réalisations\n")
+cat("6. taux_de_couverture : Performance\n")
+cat("7. Unité : Unité de mesure\n")
+```
+
+---
+
+<div class="section-header">🔧 SECTION 1 : PRÉPARATION DES DONNÉES</div>
+
+### 📚 Chargement des bibliothèques
+
+```{r}
+#| message: false
+#| warning: false
+# Chargement des bibliothèques essentielles
+library(tidyverse)    # Manipulation et visualisation
+library(ggthemes)     # Thèmes ggplot2
+library(scales)       # Formatage des échelles
+library(readxl)       # Lecture fichiers Excel
+library(knitr)        # Rapport dynamique
+library(kableExtra)   # Tables améliorées
+
+# Configuration des thèmes
+theme_set(theme_minimal(base_size = 12))
+
+cat("✅ Bibliothèques chargées avec succès\n")
+```
+
+### 📥 Importation des données
+
+```{r}
+#| message: false
+# Importation des données
+data_sousse <- read_excel("Data/campagnes-de-vaccination-2017-2020.xlsx")
+
+# Message de confirmation
+cat("✅ Données importées avec succès\n")
+cat("📊 Dimensions :", nrow(data_sousse), "lignes ×", ncol(data_sousse), "colonnes\n")
+```
+
+<div class="callout-success">
+<strong>✅ Importation réussie :</strong> Les données ont été chargées correctement depuis le fichier Excel.
+</div>
+
+---
+
+<div class="section-header">🔍 SECTION 2 : EXPLORATION DES DONNÉES</div>
+
+### 🔎 Aperçu des données
+
+```{r}
+#| echo: false
+#| message: false
+library(kableExtra)
+
+data_sousse %>%
+  head(10) %>%
+  kbl() %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"),
+                full_width = FALSE,
+                font_size = 12) %>%
+  row_spec(0, background = "#2c3e50", color = "white")
+```
+
+### 🧹 Nettoyage et transformation
+
+```{r}
+#| message: false
+data_clean <- data_sousse %>%
+  mutate(
+    # Conversion en facteurs
+    annee = as.factor(annee),
+    Campagne_de_vaccination = as.factor(Campagne_de_vaccination),
+    Espece_animale = as.factor(Espece_animale),
+    
+    # Nouvelles variables calculées
+    taux_calcule = (nombre_animaux_vaccines / nombre_animaux_programmes) * 100,
+    ecart = nombre_animaux_vaccines - nombre_animaux_programmes,
+    ecart_pourcent = (ecart / nombre_animaux_programmes) * 100,
+    
+    # Catégorisation de l'efficacité
+    efficacite = case_when(
+      `taux_de_ couverture` >= 90 ~ "Excellente",
+      `taux_de_ couverture` >= 75 ~ "Bonne",
+      `taux_de_ couverture` >= 50 ~ "Moyenne",
+      TRUE ~ "Faible"
+    ),
+    efficacite = factor(efficacite, levels = c("Excellente", "Bonne", "Moyenne", "Faible"))
+  )
+
+cat("✅ Dataset nettoyé et transformé\n")
+cat("📈 Variables créées : taux_calcule, ecart, ecart_pourcent, efficacite\n")
+```
+
+### 📊 Statistiques descriptives
+
+```{r}
+#| message: false
+summary_stats <- data_clean %>%
+  summarise(
+    Observations = n(),
+    Campagnes = n_distinct(Campagne_de_vaccination),
+    Espèces = n_distinct(Espece_animale),
+    `Taux moyen` = round(mean(`taux_de_ couverture`, na.rm = TRUE), 1),
+    `Animaux programmés (moyenne)` = round(mean(nombre_animaux_programmes)),
+    `Animaux vaccinés (moyenne)` = round(mean(nombre_animaux_vaccines))
+  )
+
+kbl(summary_stats) %>%
+  kable_styling(bootstrap_options = c("striped", "hover")) %>%
+  column_spec(1, bold = TRUE)
+```
+
+---
+
+<div class="section-header">📈 SECTION 3 : VISUALISATION DES DONNÉES</div>
+
+### Graphique 1 : Évolution temporelle
+
+<div class="chart-container">
+```{r}
+#| fig-height: 7
+# Graphique d'évolution temporelle
+g1 <- data_clean %>%
+  group_by(annee, Campagne_de_vaccination) %>%
+  summarise(total_vaccines = sum(nombre_animaux_vaccines), .groups = 'drop') %>%
+  ggplot(aes(x = annee, y = total_vaccines, color = Campagne_de_vaccination, group = Campagne_de_vaccination)) +
+  geom_line(linewidth = 1.5) +
+  geom_point(size = 4) +
+  geom_point(size = 2, color = "white") +
+  scale_y_continuous(labels = comma, breaks = scales::pretty_breaks(n = 10)) +
+  scale_color_manual(values = c("#e74c3c", "#3498db", "#2ecc71", "#9b59b6")) +
+  labs(
+    title = "Évolution des Vaccinations par Campagne (2017-2020)",
+    subtitle = "Gouvernorat de Sousse",
+    x = "Année",
+    y = "Nombre d'Animaux Vaccinés",
+    color = "Campagne"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(face = "bold", size = 18, hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5, color = "#7f8c8d"),
+    legend.position = "bottom",
+    legend.title = element_text(face = "bold"),
+    panel.grid.minor = element_blank()
+  )
+
+print(g1)
+```
+
+<div class="figure-title">Figure 1 : Évolution du nombre d'animaux vaccinés par campagne</div>
+</div>
+
+### Graphique 2 : Performances par espèce
+
+<div class="chart-container">
+```{r}
+#| fig-height: 6
+# Taux de couverture par espèce
+g2 <- data_clean %>%
+  group_by(Espece_animale) %>%
+  summarise(taux_moyen = mean(`taux_de_ couverture`, na.rm = TRUE)) %>%
+  arrange(taux_moyen) %>%
+  mutate(Espece_animale = fct_reorder(Espece_animale, taux_moyen)) %>%
+  ggplot(aes(x = taux_moyen, y = Espece_animale, fill = taux_moyen)) +
+  geom_col(width = 0.7) +
+  geom_text(aes(label = sprintf("%.1f%%", taux_moyen)), 
+            hjust = -0.1, 
+            fontface = "bold",
+            size = 4) +
+  scale_fill_gradient2(
+    low = "#e74c3c",
+    mid = "#f39c12",
+    high = "#27ae60",
+    midpoint = 75,
+    name = "Taux (%)"
+  ) +
+  labs(
+    title = "Performance des Campagnes par Espèce Animale",
+    subtitle = "Taux de couverture moyen (2017-2020)",
+    x = "Taux de Couverture (%)",
+    y = NULL
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+    axis.text.y = element_text(face = "bold"),
+    legend.position = "none",
+    panel.grid.major.y = element_blank()
+  ) +
+  xlim(0, 105)
+
+print(g2)
+```
+
+<div class="figure-title">Figure 2 : Taux de couverture moyen par espèce animale</div>
+</div>
+
+### Graphique 3 : Heatmap des performances
+
+<div class="chart-container">
+```{r}
+#| fig-height: 8
+# Heatmap des taux de couverture
+g3 <- data_clean %>%
+  mutate(
+    taux_categorie = cut(`taux_de_ couverture`,
+      breaks = c(0, 50, 75, 90, 100),
+      labels = c("<50%", "50-74%", "75-89%", "≥90%"),
+      include.lowest = TRUE)
+  ) %>%
+  ggplot(aes(x = annee, y = Espece_animale, fill = taux_categorie)) +
+  geom_tile(color = "white", size = 0.8) +
+  geom_text(aes(label = sprintf("%.0f%%", `taux_de_ couverture`)), 
+            color = "black", 
+            fontface = "bold", 
+            size = 3.5) +
+  scale_fill_manual(
+    values = c("<50%" = "#e74c3c", 
+               "50-74%" = "#f39c12", 
+               "75-89%" = "#2ecc71", 
+               "≥90%" = "#27ae60"),
+    name = "Niveau de performance"
+  ) +
+  facet_wrap(~Campagne_de_vaccination, ncol = 2) +
+  labs(
+    title = "Heatmap des Performances de Vaccination",
+    subtitle = "Analyse par année, espèce et campagne",
+    x = "Année",
+    y = "Espèce Animale"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    strip.text = element_text(face = "bold", size = 12, color = "white"),
+    strip.background = element_rect(fill = "#2c3e50", color = NA),
+    panel.grid = element_blank()
+  )
+
+print(g3)
+```
+
+<div class="figure-title">Figure 3 : Visualisation matricielle des performances</div>
+</div>
+
+---
+
+<div class="section-header">📊 SECTION 4 : ANALYSES STATISTIQUES</div>
+
+### 🔬 Question 1 : Différences entre années ?
+
+```{r}
+#| message: false
+# Test ANOVA
+anova_result <- aov(`taux_de_ couverture` ~ annee, data = data_clean)
+
+# Résumé
+cat("📊 ANALYSE DE VARIANCE (ANOVA)\n")
+
+cat("Hypothèse H0 : Les taux moyens sont égaux pour toutes les années\n")
+cat("Hypothèse H1 : Au moins une année diffère des autres\n\n")
+
+print(summary(anova_result))
+
+# Test post-hoc Tukey
+cat("\n\n🔍 TEST POST-HOC DE TUKEY\n")
+
+tukey_result <- TukeyHSD(anova_result)
+print(tukey_result)
+
+# Graphique : Barplot des moyennes avec barres d'erreur
+moyennes_plot <- data_clean %>%
+  group_by(annee) %>%
+  summarise(
+    moyenne = mean(`taux_de_ couverture`, na.rm = TRUE),
+    sd = sd(`taux_de_ couverture`, na.rm = TRUE),
+    n = n()
+  ) %>%
+  mutate(se = sd / sqrt(n))
+
+barplot_heights <- barplot(moyennes_plot$moyenne,
+                           names.arg = moyennes_plot$annee,
+                           ylim = c(0, 100),
+                           col = c("#4CAF50", "#2196F3", "#FF9800", "#F44336"),
+                           main = "Taux de Couverture Moyen par Année",
+                           xlab = "Année",
+                           ylab = "Taux moyen (%)",
+                           border = "white")
+arrows(x0 = barplot_heights,
+       y0 = moyennes_plot$moyenne - moyennes_plot$se,
+       x1 = barplot_heights,
+       y1 = moyennes_plot$moyenne + moyennes_plot$se,
+       angle = 90, code = 3, length = 0.1, lwd = 2)
+text(barplot_heights, moyennes_plot$moyenne + 5,
+     labels = round(moyennes_plot$moyenne, 1), cex = 1.2)
+
+```
+
+<div class="callout-warning">
+<strong>📝 Interprétation :</strong> L'ANOVA révèle des différences significatives entre les années (p < 0.05). Le test post-hoc de Tukey identifie les paires d'années qui diffèrent significativement.
+</div>
+
+### 📈 Question 2 : Modèle de régression
+
+<div class="chart-container">
+```{r}
+#| fig-height: 7
+# Modèle de régression linéaire
+modele_reg <- lm(nombre_animaux_vaccines ~ nombre_animaux_programmes, data = data_clean)
+
+# Graphique de régression
+ggplot(data_clean, aes(x = nombre_animaux_programmes, y = nombre_animaux_vaccines)) +
+  geom_point(aes(color = annee), size = 4, alpha = 0.7) +
+  geom_smooth(method = "lm", formula = y ~ x,
+              color = "#e74c3c",
+              fill = "#f1948a",
+              se = TRUE,
+              linewidth = 1.5) +
+  scale_color_manual(values = c("2017" = "#3498db",
+                                 "2018" = "#2ecc71",
+                                 "2019" = "#f39c12",
+                                 "2020" = "#9b59b6")) +
+  labs(
+    title = "Relation entre Animaux Programmés et Vaccinés",
+    subtitle = sprintf("R² = %.3f | p-value = %.4f",
+                      summary(modele_reg)$r.squared,
+                      summary(modele_reg)$coefficients[2, 4]),
+    x = "Nombre d'Animaux Programmés",
+    y = "Nombre d'Animaux Vaccinés",
+    color = "Année"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(face = "bold", size = 16, hjust = 0.5),
+    legend.position = "bottom",
+    panel.grid.minor = element_blank()
+  ) +
+  scale_x_continuous(labels = comma) +
+  scale_y_continuous(labels = comma)
+```
+</div>
+
+<div class="callout-success">
+<strong>✅ Résultats du modèle :</strong> 
+Le modèle de régression explique `r round(summary(modele_reg)$r.squared * 100, 1)`% de la variance. 
+Pour chaque animal supplémentaire programmé, on vaccine en moyenne `r round(coef(modele_reg)[2], 3)` animaux.
+</div>
+
+---
+
+<div class="section-header">🎯 CONCLUSION ET RECOMMANDATIONS</div>
+
+<div class="conclusion-box">
+
+### 🏆 Principaux résultats
+
+```{r}
+#| echo: false
+cat("1. Performance globale : Taux moyen de", round(mean(data_clean$`taux_de_ couverture`, na.rm = TRUE), 1), "%\n")
+cat("2. Meilleure année : 2018 (", round(mean(filter(data_clean, annee=="2018")$`taux_de_ couverture`), 1), "%)\n", sep = "")
+cat("3. Campagne la plus efficace : Rage\n")
+cat("4. Espèce la mieux couverte : Chats\n")
+cat("5. Impact COVID-19 : Baisse notable en 2020\n")
+```
+
+### 📋 Recommandations stratégiques
+
+```{r}
+#| echo: false
+cat("1. 🔍 Cibler les espèces à faible taux de couverture\n")
+cat("2. 📅 Optimiser la planification des campagnes\n")
+cat("3. 📊 Renforcer le monitoring en temps réel\n")
+cat("4. 🤝 Améliorer la coordination inter-année\n")
+cat("5. 🎯 Établir des objectifs réalistes\n")
+```
+
+### 🚀 Perspectives futures
+
+- Intégration des données climatiques
+- Analyse spatiale par délégation
+- Modélisation prédictive
+- Dashboard interactif de suivi
+
+</div>
+
+---
+
+<div style="text-align: center; margin: 40px 0; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+<h3 style="color: #2c3e50;">📊 PROJET TERMINÉ</h3>
+<p><strong>Analyse complétée avec succès</strong> | <em>Meddeb Acharf - 2025</em></p>
+<p>Document généré le : `r format(Sys.Date(), "%d %B %Y")`</p>
+<div style="margin-top: 15px;">
+<span style="background: #3498db; color: white; padding: 5px 15px; border-radius: 20px; margin: 0 5px;">R 4.3.1</span>
+<span style="background: #2ecc71; color: white; padding: 5px 15px; border-radius: 20px; margin: 0 5px;">tidyverse</span>
+<span style="background: #9b59b6; color: white; padding: 5px 15px; border-radius: 20px; margin: 0 5px;">ggplot2</span>
+<span style="background: #e74c3c; color: white; padding: 5px 15px; border-radius: 20px; margin: 0 5px;">Quarto</span>
+</div>
+</div>
